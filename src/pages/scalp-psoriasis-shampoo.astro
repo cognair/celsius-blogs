@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ScalpPsoriasisShampooIsland from "../islands/pdp/ScalpPsoriasisShampoo";
+import { mergeShopifyProductSeo, SHOPIFY_PRODUCT_HANDLES } from "../lib/shopify";
+
+const staticMeta = {
+  title: "Dermveda Scalp Psoriasis Shampoo | Celsius Herbs",
+  description:
+    "Therapeutic shampoo for scalp psoriasis with sulfur, tea tree, neem, and karanja. USDA organic ingredients.",
+  canonical: "https://celsiusherbs.com/scalp-psoriasis-shampoo",
+};
+
+const merged = await mergeShopifyProductSeo(SHOPIFY_PRODUCT_HANDLES.scalpPsoriasisShampoo, staticMeta);
+const { jsonLd, ...layoutProps } = merged;
+---
+
+<Layout {...layoutProps} jsonLd={jsonLd}>
+  <ScalpPsoriasisShampooIsland client:load />
+</Layout>

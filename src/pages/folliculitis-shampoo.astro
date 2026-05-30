@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import FolliculitisShampooIsland from "../islands/pdp/FolliculitisShampoo";
+import { mergeShopifyProductSeo, SHOPIFY_PRODUCT_HANDLES } from "../lib/shopify";
+
+const staticMeta = {
+  title: "Folliculitis Shampoo | Celsius Herbs",
+  description: "Therapeutic shampoo formulated for folliculitis-prone scalp and skin.",
+  canonical: "https://celsiusherbs.com/folliculitis-shampoo",
+};
+
+const merged = await mergeShopifyProductSeo(SHOPIFY_PRODUCT_HANDLES.folliculitisShampoo, staticMeta);
+const { jsonLd, ...layoutProps } = merged;
+---
+
+<Layout {...layoutProps} jsonLd={jsonLd}>
+  <FolliculitisShampooIsland client:load />
+</Layout>

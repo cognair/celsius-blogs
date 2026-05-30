@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CatDandruffLotionIsland from "../islands/pdp/CatDandruffLotion";
+import { mergeShopifyProductSeo, SHOPIFY_PRODUCT_HANDLES } from "../lib/shopify";
+
+const staticMeta = {
+  title: "Cat Dandruff Lotion | Celsius Herbs",
+  description: "Gentle dandruff care for cats — plant-based relief from Celsius Herbs.",
+  canonical: "https://celsiusherbs.com/cat-dandruff-lotion",
+};
+
+const merged = await mergeShopifyProductSeo(SHOPIFY_PRODUCT_HANDLES.catDandruffLotion, staticMeta);
+const { jsonLd, ...layoutProps } = merged;
+---
+
+<Layout {...layoutProps} jsonLd={jsonLd}>
+  <CatDandruffLotionIsland client:load />
+</Layout>

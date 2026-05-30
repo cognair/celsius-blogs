@@ -1,0 +1,12 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CartBagIsland from "../islands/CartBag";
+---
+
+<Layout
+  title="Your Bag | Celsius Herbs"
+  description="Review the items in your bag and proceed to secure checkout."
+  canonical="https://celsiusherbs.com/cart"
+>
+  <CartBagIsland client:load />
+</Layout>

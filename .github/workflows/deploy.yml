@@ -1,0 +1,77 @@
+# =============================================================================
+# Celsius Herbs — Astro → Cloudflare Pages deploy
+#
+# Why this exists: local `wrangler pages deploy` from our laptop kept hitting
+# Cloudflare's 60s API gateway timeout on the larger media files (80MB dist,
+# 11 files in the 1.5–4.5MB range). GitHub Actions runners sit in datacenters
+# with ~1–10 Gbps upload to Cloudflare, so the same upload completes in
+# seconds instead of minutes — the timeout never fires.
+#
+# Targets the existing Direct Upload Pages project `deploy-celsius-herbs-dev`
+# (custom domain blog.celsiusherbs.com). Project mode stays Direct Upload;
+# this workflow just runs the same `wrangler pages deploy` from CI.
+# =============================================================================
+
+name: Deploy to Cloudflare Pages
+
+on:
+  # Auto-deploy on every push to main (production) or to preview/* branches (preview).
+  push:
+    branches:
+      - main
+      - 'preview/**'
+  # Manual trigger from the Actions tab — useful for re-running without a code change
+  workflow_dispatch:
+
+# Prevent concurrent deploys to the same environment from clobbering each other
+concurrency:
+  group: cloudflare-pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Build & Deploy
+
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          # Pinned via .nvmrc to match Cloudflare Pages build v3 default (22.16.0)
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro site
+        env:
+          # PUBLIC_* env vars must be present at build time — Astro inlines them
+          # into the client bundle. Sourced from GitHub Actions secrets.
+          PUBLIC_SHOPIFY_STORE_DOMAIN: ${{ secrets.PUBLIC_SHOPIFY_STORE_DOMAIN }}
+          PUBLIC_SHOPIFY_STOREFRONT_API_TOKEN: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_API_TOKEN }}
+        run: npm run build
+
+      - name: Compute Cloudflare branch name
+        id: cf_branch
+        run: |
+          # Cloudflare Pages branch slugs replace `/` with `-`.
+          # main → main (production); preview/cat-ear-mites → preview-cat-ear-mites (preview).
+          echo "name=${GITHUB_REF_NAME//\//-}" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # branch=main → production; anything else → preview deploy.
+          # Cloudflare auto-routes non-main deploys to a unique preview URL.
+          command: pages deploy dist --project-name=deploy-celsius-herbs-dev --branch=${{ steps.cf_branch.outputs.name }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}

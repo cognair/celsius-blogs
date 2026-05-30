@@ -1,0 +1,97 @@
+---
+import "../styles/global.css";
+import { getMenu } from "../lib/shopify/storefront";
+import SiteHeaderIsland from "../islands/SiteHeader";
+import SiteFooterIsland from "../islands/SiteFooter";
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogType?: string;
+  /** Schema.org Product when merged from Shopify Storefront */
+  jsonLd?: Record<string, unknown> | null;
+}
+
+const {
+  title,
+  description = "USDA-organic skincare and therapeutic hair care from Celsius Herbs.",
+  canonical,
+  ogTitle,
+  ogDescription,
+  ogImage = "https://celsiusherbs.com/cdn/shop/files/celsius-herbs-logo.png",
+  ogType = "website",
+  jsonLd,
+} = Astro.props;
+
+const resolvedOgTitle = ogTitle ?? title;
+const resolvedOgDescription = ogDescription ?? description;
+
+// Fetch all menus in parallel; fall back to empty arrays on error
+const [mainMenuResult, shopAllResult, policiesResult, quickLinksResult, supportPoliciesResult] =
+  await Promise.allSettled([
+    getMenu("main-menu"),
+    getMenu("shop-all"),
+    getMenu("polices"),       // handle name per task spec (note: intentional typo)
+    getMenu("quick-links"),
+    getMenu("support-policies"),
+  ]);
+
+const mainMenu       = mainMenuResult.status       === "fulfilled" ? (mainMenuResult.value?.items       ?? []) : [];
+const shopAllMenu    = shopAllResult.status         === "fulfilled" ? (shopAllResult.value?.items        ?? []) : [];
+const policiesMenu   = policiesResult.status        === "fulfilled" ? (policiesResult.value?.items       ?? []) : [];
+const quickLinks     = quickLinksResult.status      === "fulfilled" ? (quickLinksResult.value?.items     ?? []) : [];
+const supportPolicies = supportPoliciesResult.status === "fulfilled" ? (supportPoliciesResult.value?.items ?? []) : [];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Celsius Herbs" />
+    {canonical && <link rel="canonical" href={canonical} />}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta property="og:title" content={resolvedOgTitle} />
+    <meta property="og:description" content={resolvedOgDescription} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:image" content={ogImage} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {
+      jsonLd && (
+        <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+      )
+    }
+  </head>
+  <body>
+    <SiteHeaderIsland
+      mainMenu={mainMenu}
+      shopAllMenu={shopAllMenu}
+      policiesMenu={policiesMenu}
+      client:load
+    />
+
+    <slot />
+
+    <SiteFooterIsland
+      quickLinks={quickLinks}
+      supportPolicies={supportPolicies}
+      client:load
+    />
+  </body>
+</html>

@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import VglowYeastSerumIsland from "../islands/pdp/VglowYeastSerum";
+import { mergeShopifyProductSeo, SHOPIFY_PRODUCT_HANDLES } from "../lib/shopify";
+
+const staticMeta = {
+  title: "Vglow Yeast Serum | Celsius Herbs",
+  description: "Targeted serum support — Celsius Herbs.",
+  canonical: "https://celsiusherbs.com/vglow-yeast-serum",
+};
+
+const merged = await mergeShopifyProductSeo(SHOPIFY_PRODUCT_HANDLES.vglowYeastSerum, staticMeta);
+const { jsonLd, ...layoutProps } = merged;
+---
+
+<Layout {...layoutProps} jsonLd={jsonLd}>
+  <VglowYeastSerumIsland client:load />
+</Layout>

@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tatcha x Glo inspired editorial PDP design system
+   Cream/ivory canvas, serif display, deep ink, soft sage + warm gold accents.
+   All colors HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 32 40% 97%;          /* warm porcelain */
+    --foreground: 25 30% 12%;          /* warm ink */
+
+    --card: 32 40% 99%;
+    --card-foreground: 25 30% 12%;
+
+    --popover: 32 40% 99%;
+    --popover-foreground: 25 30% 12%;
+
+    --primary: 25 35% 14%;             /* near-black warm */
+    --primary-foreground: 32 40% 97%;
+
+    --secondary: 28 35% 92%;
+    --secondary-foreground: 25 30% 12%;
+
+    --muted: 28 25% 90%;
+    --muted-foreground: 25 12% 42%;
+
+    --accent: 22 75% 60%;              /* warm peach-coral */
+    --accent-foreground: 32 40% 99%;
+
+    --gold: 28 60% 45%;                /* warm bronze for accents */
+    --gold-foreground: 32 40% 99%;
+
+    --peach: 24 75% 88%;               /* light peach surface */
+    --peach-deep: 22 70% 78%;          /* mid peach */
+    --ink-deep: 25 35% 14%;
+
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 32 40% 99%;
+
+    --border: 28 20% 86%;
+    --input: 28 20% 86%;
+    --ring: 25 35% 14%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 32 40% 97%;
+    --sidebar-foreground: 25 30% 12%;
+    --sidebar-primary: 25 35% 14%;
+    --sidebar-primary-foreground: 32 40% 97%;
+    --sidebar-accent: 28 35% 92%;
+    --sidebar-accent-foreground: 25 30% 12%;
+    --sidebar-border: 28 20% 86%;
+    --sidebar-ring: 25 35% 14%;
+  }
+
+  .dark {
+    --background: 220 25% 8%;
+    --foreground: 40 33% 96%;
+    --card: 220 25% 10%;
+    --card-foreground: 40 33% 96%;
+    --popover: 220 25% 10%;
+    --popover-foreground: 40 33% 96%;
+    --primary: 40 33% 96%;
+    --primary-foreground: 220 25% 12%;
+    --secondary: 220 20% 18%;
+    --secondary-foreground: 40 33% 96%;
+    --muted: 220 20% 18%;
+    --muted-foreground: 40 10% 65%;
+    --accent: 145 18% 30%;
+    --accent-foreground: 40 33% 96%;
+    --destructive: 0 60% 40%;
+    --destructive-foreground: 40 33% 96%;
+    --border: 220 20% 20%;
+    --input: 220 20% 20%;
+    --ring: 40 33% 96%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .font-serif {
+    font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  .nav-header-grid {
+    @apply flex flex-wrap items-center gap-x-10 gap-y-5 p-5 font-sans text-[19px];
+  }
+
+  .nav-link-blue {
+    @apply text-[#003366] font-medium no-underline hover:opacity-80;
+  }
+
+  .nav-link-black {
+    @apply text-black font-semibold no-underline hover:opacity-80;
+  }
+
+  .footer-heading {
+  @apply text-black font-semibold text-lg mb-6 tracking-tight font-sans;
+}
+
+  .footer-link {
+    @apply text-[#003366] font-medium text-sm no-underline hover:opacity-80;
+  }
+}
+
+@layer utilities {
+  .text-gold { color: hsl(var(--gold)); }
+  .bg-gold { background-color: hsl(var(--gold)); }
+  .bg-peach { background-color: hsl(var(--peach)); }
+  .bg-peach-deep { background-color: hsl(var(--peach-deep)); }
+  .text-ink-deep { color: hsl(var(--ink-deep)); }
+  .bg-ink-deep { background-color: hsl(var(--ink-deep)); }
+
+  /* Hide native scrollbar while keeping scroll behaviour. */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Shimmer used as a lightweight placeholder while the hero mp4
+     upgrades from poster to full video. Sweeps a soft warm highlight
+     across the surface every 1.6s. */
+  .shimmer-overlay {
+    background: linear-gradient(
+      100deg,
+      hsl(var(--peach) / 0) 30%,
+      hsl(var(--background) / 0.55) 50%,
+      hsl(var(--peach) / 0) 70%
+    );
+    background-size: 220% 100%;
+    animation: shimmer-sweep 1.6s ease-in-out infinite;
+  }
+  @keyframes shimmer-sweep {
+    0%   { background-position: 180% 0; }
+    100% { background-position: -80% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shimmer-overlay { animation: none; }
+  }
+}

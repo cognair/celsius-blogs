@@ -1,0 +1,38 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CatEarInfectionGuideIsland from "../islands/blog/CatEarInfectionGuide";
+import {
+  buildCatEarInfectionFaqJsonLd,
+  buildCatEarInfectionArticleJsonLd,
+} from "../lib/blog/cat-ear-infection-faqs";
+
+// Primary keyword: "cat ear infection" (Ahrefs US — vol 6,600 / KD 3 / TP 11k).
+// Title kept under 60 chars and includes primary kw in front.
+// Description hits 155 chars and weaves in: cat ear infection symptoms,
+// cat ear infection treatment, cat ear yeast infection.
+//
+// Lives at the apex of the blog subdomain: blog.celsiusherbs.com/cat-ear-infection
+// (the subdomain implies "blog" so we don't repeat /blog/ in the path).
+//
+// Layout.astro accepts a single JSON-LD object — wrap Article + FAQPage in a
+// schema.org @graph so both schemas ship inside one <script type="application/ld+json">.
+// This is Google's recommended pattern for multi-schema pages.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    buildCatEarInfectionArticleJsonLd(),
+    buildCatEarInfectionFaqJsonLd(),
+  ],
+};
+---
+
+<Layout
+  title="Cat Ear Infection: Symptoms, Causes & Natural Treatment"
+  description="Cat ear infection field guide — recognize symptoms, tell yeast from bacterial from ear mites, treat safely at home, and know when to see a vet."
+  canonical="https://blog.celsiusherbs.com/cat-ear-infection"
+  ogType="article"
+  ogImage="https://blog.celsiusherbs.com/og/cat-ear-infection.webp"
+  jsonLd={jsonLd}
+>
+  <CatEarInfectionGuideIsland client:load />
+</Layout>

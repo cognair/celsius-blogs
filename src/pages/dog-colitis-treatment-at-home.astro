@@ -1,0 +1,32 @@
+---
+import Layout from "../layouts/Layout.astro";
+import DogColitisTreatmentAtHomeGuideIsland from "../islands/blog/DogColitisTreatmentAtHomeGuide";
+import {
+  buildDogColitisTreatmentAtHomeFaqJsonLd,
+  buildDogColitisTreatmentAtHomeArticleJsonLd,
+} from "../lib/blog/dog-colitis-treatment-at-home-faqs";
+
+// Primary keyword: "dog colitis treatment at home"
+// Title kept under 60 chars with primary kw front-loaded.
+// Lives at: blog.celsiusherbs.com/dog-colitis-treatment-at-home
+//
+// Schema: Article + FAQPage wrapped in @graph per Google's recommended pattern.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    buildDogColitisTreatmentAtHomeArticleJsonLd(),
+    buildDogColitisTreatmentAtHomeFaqJsonLd(),
+  ],
+};
+---
+
+<Layout
+  title="Dog Colitis Treatment at Home: 7 Vet-Backed Protocols"
+  description="Dog colitis treatment at home — bland diet, probiotics, slippery elm and more. Learn when to manage at home and when to call your vet."
+  canonical="https://blog.celsiusherbs.com/dog-colitis-treatment-at-home"
+  ogType="article"
+  ogImage="https://blog.celsiusherbs.com/og/dog-colitis-treatment-at-home.webp"
+  jsonLd={jsonLd}
+>
+  <DogColitisTreatmentAtHomeGuideIsland client:load />
+</Layout>

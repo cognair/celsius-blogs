@@ -1,0 +1,51 @@
+# =============================================================================
+# wrangler.toml — Celsius Herbs · Cloudflare Pages
+# Reference: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+# =============================================================================
+
+# Project name in Cloudflare Pages (must match the name created in the dashboard).
+# Live production Pages project is "deploy-celsius-herbs-dev" — custom domain
+# blog.celsiusherbs.com is attached to that project.
+name = "deploy-celsius-herbs-dev"
+
+# ----------------------------------------------------------------------------
+# Astro build output directory.
+# The @astrojs/cloudflare adapter generates static assets and Pages Functions
+# inside ./dist — this field tells Wrangler to serve from here.
+# ----------------------------------------------------------------------------
+pages_build_output_dir = "./dist"
+
+# ----------------------------------------------------------------------------
+# Workers Runtime compatibility date.
+# "2024-09-23" is the most stable and widely tested release for Astro 5 +
+# @astrojs/cloudflare v12. It activates all runtime improvements accumulated
+# up to that date without risk of breaking changes.
+# Update with care — each new date may alter runtime behaviors.
+# ----------------------------------------------------------------------------
+compatibility_date = "2024-09-23"
+
+# ----------------------------------------------------------------------------
+# Compatibility flags.
+# "nodejs_compat" enables Node.js APIs (crypto, stream, buffer, path, etc.)
+# inside the Cloudflare Edge Runtime. Required for Astro 5 SSR on Cloudflare,
+# as several ecosystem dependencies (including the adapter itself)
+# rely on Node.js modules that are not natively available in Workers.
+# ----------------------------------------------------------------------------
+compatibility_flags = ["nodejs_compat"]
+
+# ----------------------------------------------------------------------------
+# Environment variables — public (non-sensitive) values.
+# Variables prefixed with PUBLIC_ are injected into the client bundle by Astro/Vite
+# and are visible in the browser — only use values that are safe to expose.
+#
+# ⚠️  WARNING: DO NOT place real tokens or secrets here.
+#     Secrets must be configured via the Cloudflare dashboard:
+#     Pages → deploy-celsius-herbs-dev → Settings → Environment variables → Add secret
+#
+# For local development, copy .env.example to .env and fill in real values there
+# (the .env file is gitignored).
+# ----------------------------------------------------------------------------
+[vars]
+PUBLIC_SHOPIFY_STORE_DOMAIN           = "yourDomain.myshopify.com"
+PUBLIC_SHOPIFY_STOREFRONT_API_TOKEN   = "API_Key"
+# PUBLIC_SHOPIFY_API_VERSION          = "2026-01"  # uncomment to pin the API version

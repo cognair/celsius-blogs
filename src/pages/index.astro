@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+import IndexIsland from "../islands/pdp/Index";
+import { mergeShopifyProductSeo, SHOPIFY_PRODUCT_HANDLES } from "../lib/shopify";
+
+const staticMeta = {
+  title: "Organic Bakuchiol Booster Serum — Plant Retinol Alternative | Celsius Herbs",
+  description:
+    "USDA-organic Bakuchiol serum with turmeric & quinoa peptides. Smooths fine lines and dark spots in 7-9 weeks — without retinol's irritation. Pregnancy-friendly.",
+  canonical: "https://celsiusherbs.com/products/yeast-infection-cream",
+  ogTitle: "Dermveda Antifungal Yeast Cream — Celsius Herbs",
+  ogDescription: "Plant-based antifungal relief. Clinically supported. FDA registered.",
+  ogType: "product",
+};
+
+const merged = await mergeShopifyProductSeo(SHOPIFY_PRODUCT_HANDLES.index, staticMeta);
+const { jsonLd, ...layoutProps } = merged;
+---
+
+<Layout {...layoutProps} jsonLd={jsonLd}>
+  <IndexIsland client:load />
+</Layout>

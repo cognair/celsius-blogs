@@ -1,0 +1,21 @@
+---
+import Layout from "../layouts/Layout.astro";
+import DermvedaFolliculitisShampooIsland from "../islands/pdp/DermvedaFolliculitisShampoo";
+import { mergeShopifyProductSeo, SHOPIFY_PRODUCT_HANDLES } from "../lib/shopify";
+
+const staticMeta = {
+  title: "Dermveda Folliculitis Shampoo | Celsius Herbs",
+  description: "Dermveda therapeutic shampoo for folliculitis — Celsius Herbs.",
+  canonical: "https://celsiusherbs.com/dermveda-folliculitis-shampoo",
+};
+
+const merged = await mergeShopifyProductSeo(
+  SHOPIFY_PRODUCT_HANDLES.dermvedaFolliculitisShampoo,
+  staticMeta,
+);
+const { jsonLd, ...layoutProps } = merged;
+---
+
+<Layout {...layoutProps} jsonLd={jsonLd}>
+  <DermvedaFolliculitisShampooIsland client:load />
+</Layout>

@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import EarInfectionDropsIsland from "../islands/pdp/EarInfectionDrops";
+import { mergeShopifyProductSeo, SHOPIFY_PRODUCT_HANDLES } from "../lib/shopify";
+
+const staticMeta = {
+  title: "Ear Infection Drops | Celsius Herbs",
+  description: "Ear care drops — Celsius Herbs.",
+  canonical: "https://celsiusherbs.com/ear-infection-drops",
+};
+
+const merged = await mergeShopifyProductSeo(SHOPIFY_PRODUCT_HANDLES.earInfectionDrops, staticMeta);
+const { jsonLd, ...layoutProps } = merged;
+---
+
+<Layout {...layoutProps} jsonLd={jsonLd}>
+  <EarInfectionDropsIsland client:load />
+</Layout>
