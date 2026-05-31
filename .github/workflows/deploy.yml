@@ -73,5 +73,5 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           # branch=main → production; anything else → preview deploy.
           # Cloudflare auto-routes non-main deploys to a unique preview URL.
-          command: pages deploy dist --project-name=deploy-celsius-herbs-dev --branch=${{ steps.cf_branch.outputs.name }}
+          command: pages deploy --project-name=deploy-celsius-herbs-dev --branch=${{ steps.cf_branch.outputs.name }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
