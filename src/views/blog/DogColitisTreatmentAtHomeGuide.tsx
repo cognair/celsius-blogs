@@ -630,6 +630,14 @@ export default function DogColitisTreatmentAtHomeGuide() {
               formulated for canine gut health can help maintain the microbiome
               between flare-ups.
             </p>
+            <a href="/gut-health-dogs">
+              <Button
+                size="lg"
+                className="rounded-full bg-primary-foreground text-ink-deep hover:bg-primary-foreground/90"
+              >
+                Browse Celsius Herbs Gut Support for Dogs →
+              </Button>
+            </a>
           </section>
 
         </article>
